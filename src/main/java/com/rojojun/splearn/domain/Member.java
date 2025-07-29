@@ -1,26 +1,38 @@
 package com.rojojun.splearn.domain;
 
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
 import org.springframework.util.Assert;
 
 import static java.util.Objects.requireNonNull;
 
+@Entity
 @Getter
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NaturalIdCache
 public class Member {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NaturalId
+    @Embedded
     private Email email;
 
     private String nickname;
 
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
-    private Member() {
-    }
-
-    public static Member create(MemberCreateRequest createRequest, PasswordEncoder passwordEncoder) {
+    public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
         member.email = new Email(requireNonNull(createRequest.email()));
@@ -41,7 +53,7 @@ public class Member {
     public void deactivate() {
         Assert.state(status == MemberStatus.ACTIVE, "ACTIVE 상태가 아닙니다");
 
-        this.status = MemberStatus.DEACTIVATE;
+        this.status = MemberStatus.DEACTIVATED;
     }
 
     public boolean verifyPassword(String password, PasswordEncoder passwordEncoder) {

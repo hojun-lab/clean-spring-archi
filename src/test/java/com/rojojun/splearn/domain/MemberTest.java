@@ -3,6 +3,8 @@ package com.rojojun.splearn.domain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static com.rojojun.splearn.domain.MemberFixture.createMemberRegisterRequest;
+import static com.rojojun.splearn.domain.MemberFixture.createPasswordEncoder;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -12,76 +14,66 @@ class MemberTest {
 
     @BeforeEach
     void setUp() {
-        this.passwordEncoder = new PasswordEncoder() {
-            @Override
-            public String encode(String password) {
-                return password.toUpperCase();
-            }
-
-            @Override
-            public boolean matches(String password, String passwordHash) {
-                return encode(password).equals(passwordHash);
-            }
-        };
-
-        member = Member.create(new MemberCreateRequest("hojun@splearn.app", "Rojojun", "secret"), passwordEncoder);
+        this.passwordEncoder = createPasswordEncoder();
+        member = Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 
     @Test
-    void createMember() {
+    void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
     void activate() {
+        assertThat(member.getDetail().getActivatedAt()).isNull();
+
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
     void activateFail() {
         member.activate();
 
-        assertThatThrownBy(member::activate).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> {
+            member.activate();
+        }).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void deactivate() {
         member.activate();
+
         member.deactivate();
 
-        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATE);
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
     void deactivateFail() {
-        assertThatThrownBy(member::deactivate).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> member.deactivate()).isInstanceOf(IllegalStateException.class);
 
         member.activate();
         member.deactivate();
 
-        assertThatThrownBy(member::deactivate).isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(() -> member.deactivate()).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
     void verifyPassword() {
-        assertThat(member.verifyPassword("secret", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("hello", passwordEncoder)).isFalse();
     }
 
     @Test
-    void changeNickname() {
-        assertThat(member.getNickname()).isEqualTo("Rojojun");
-        member.changeNickname("Me");
-        assertThat(member.getNickname()).isEqualTo("Me");
-    }
-
-    @Test
     void changePassword() {
-        member.changePassword("verysecrey", passwordEncoder);
+        member.changePassword("verysecret2", passwordEncoder);
 
-        assertThat(member.verifyPassword("verysecrey", passwordEncoder)).isTrue();
+        assertThat(member.verifyPassword("verysecret2", passwordEncoder)).isTrue();
     }
 
     @Test
@@ -100,9 +92,9 @@ class MemberTest {
     @Test
     void invalidEmail() {
         assertThatThrownBy(() ->
-                Member.create(new MemberCreateRequest("invalid email", "Rojojun", "secret"), passwordEncoder)
+                Member.register(createMemberRegisterRequest("invalid email"), passwordEncoder)
         ).isInstanceOf(IllegalArgumentException.class);
 
-        Member.create(new MemberCreateRequest("rojojun@email.com", "Rojojun", "secret"), passwordEncoder);
+        Member.register(createMemberRegisterRequest(), passwordEncoder);
     }
 }
