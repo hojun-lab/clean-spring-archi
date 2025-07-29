@@ -3,6 +3,7 @@ package com.rojojun.splearn.application;
 import com.rojojun.splearn.application.provided.MemberRegister;
 import com.rojojun.splearn.application.required.EmailSender;
 import com.rojojun.splearn.application.required.MemberRepository;
+import com.rojojun.splearn.domain.DuplicateEmailException;
 import com.rojojun.splearn.domain.Member;
 import com.rojojun.splearn.domain.MemberRegisterRequest;
 import com.rojojun.splearn.domain.PasswordEncoder;
@@ -18,12 +19,24 @@ public class MemberService implements MemberRegister {
 
     @Override
     public Member register(MemberRegisterRequest registerRequest) {
-        // check
+        checkDuplicateEmail(registerRequest);
+
         Member member = Member.register(registerRequest, passwordEncoder);
 
         memberRepository.save(member);
-        emailSender.send(member.getEmail(), "등록을 완료해주새요", "아래 링크를 클릭해서 등록을 완료해주세요");
+
+        sendWelcomeEmail(member);
 
         return member;
+    }
+
+    private void sendWelcomeEmail(Member member) {
+        emailSender.send(member.getEmail(), "등록을 완료해주새요", "아래 링크를 클릭해서 등록을 완료해주세요");
+    }
+
+    private void checkDuplicateEmail(MemberRegisterRequest registerRequest) {
+        if (memberRepository.findByEmail(registerRequest.email()).isPresent()) {
+            throw new DuplicateEmailException("이미 사용 중인 이메일 입니다: " + registerRequest.email());
+        }
     }
 }
