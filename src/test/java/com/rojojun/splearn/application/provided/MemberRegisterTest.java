@@ -1,27 +1,21 @@
 package com.rojojun.splearn.application.provided;
 
 import com.rojojun.splearn.SplearnTestConfiguration;
-import com.rojojun.splearn.domain.DuplicateEmailException;
-import com.rojojun.splearn.domain.Member;
-import com.rojojun.splearn.domain.MemberFixture;
-import com.rojojun.splearn.domain.MemberStatus;
-import jakarta.transaction.Transactional;
+import com.rojojun.splearn.domain.*;
+import jakarta.persistence.EntityManager;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.test.context.TestConstructor;
+import jakarta.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-@Import(SplearnTestConfiguration.class)
-@TestConstructor(autowireMode = TestConstructor.AutowireMode.ALL)
-@Transactional
 @SpringBootTest
-public record MemberRegisterTest(
-        MemberRegister memberRegister
-) {
+@Transactional
+@Import(SplearnTestConfiguration.class)
+public record MemberRegisterTest(MemberRegister memberRegister, EntityManager entityManager) {
 
     @Test
     void register() {
@@ -38,4 +32,32 @@ public record MemberRegisterTest(
         assertThatThrownBy(() -> memberRegister.register(MemberFixture.createMemberRegisterRequest()))
                 .isInstanceOf(DuplicateEmailException.class);
     }
+
+    @Test
+    void activate() {
+        Member member = memberRegister.register(MemberFixture.createMemberRegisterRequest());
+        entityManager.flush();
+        entityManager.clear();
+
+        member = memberRegister.activate(member.getId());
+
+        entityManager.flush();
+
+        assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+    }
+
+    @Test
+    void memberNotFoundFail() {
+        invalidRequest(new MemberRegisterRequest("zoloman316@gmail.com", "roro", "password"));
+        invalidRequest(new MemberRegisterRequest("zoloman316@gmail.com", "roro00o0o0o0o0o0o0o0o0o0o0o0o0o0o0o0o0", "password"));
+        invalidRequest(new MemberRegisterRequest("zoloman316.com", "rorojun", "password"));
+        invalidRequest(new MemberRegisterRequest("zoloman@316.com", "rorojun", "pas"));
+    }
+
+    private void invalidRequest(MemberRegisterRequest invalid) {
+        assertThatThrownBy(() -> memberRegister.register(invalid))
+                .isInstanceOf(ConstraintViolationException.class);
+    }
 }
+
+

@@ -1,5 +1,6 @@
 package com.rojojun.splearn.application;
 
+import com.rojojun.splearn.application.provided.MemberFinder;
 import com.rojojun.splearn.application.provided.MemberRegister;
 import com.rojojun.splearn.application.required.EmailSender;
 import com.rojojun.splearn.application.required.MemberRepository;
@@ -7,12 +8,17 @@ import com.rojojun.splearn.domain.DuplicateEmailException;
 import com.rojojun.splearn.domain.Member;
 import com.rojojun.splearn.domain.MemberRegisterRequest;
 import com.rojojun.splearn.domain.PasswordEncoder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
+@Transactional
 @RequiredArgsConstructor
 @Service
-public class MemberService implements MemberRegister {
+public class MemberModifyService implements MemberRegister {
+    private final MemberFinder memberFinder;
     private final MemberRepository memberRepository;
     private final EmailSender emailSender;
     private final PasswordEncoder passwordEncoder;
@@ -28,6 +34,15 @@ public class MemberService implements MemberRegister {
         sendWelcomeEmail(member);
 
         return member;
+    }
+
+    @Override
+    public Member activate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+
+        member.activate();
+
+        return memberRepository.save(member);
     }
 
     private void sendWelcomeEmail(Member member) {

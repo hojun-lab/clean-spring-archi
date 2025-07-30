@@ -10,4 +10,6 @@ public interface MemberRepository extends Repository<Member, Long> {
 //    ScopedValue<Object> findById(Long id);
 
      Optional<Member> findByEmail(String email);
+
+    Optional<Member> findById(Long memberId);
 }
