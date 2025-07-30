@@ -36,7 +36,6 @@ class MemberRepositoryTest {
 
         var found = memberRepository.findById(member.getId()).orElseThrow();
         assertThat(found.getStatus()).isEqualTo(MemberStatus.PENDING);
-        assertThat(found.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test

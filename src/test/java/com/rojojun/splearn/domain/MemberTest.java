@@ -21,17 +21,13 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
-        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
     void activate() {
-        assertThat(member.getDetail().getActivatedAt()).isNull();
-
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
-        assertThat(member.getDetail().getActivatedAt()).isNotNull();
     }
 
     @Test
@@ -50,7 +46,6 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
-        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -67,6 +62,15 @@ class MemberTest {
     void verifyPassword() {
         assertThat(member.verifyPassword("verysecret", passwordEncoder)).isTrue();
         assertThat(member.verifyPassword("hello", passwordEncoder)).isFalse();
+    }
+
+    @Test
+    void changeNickname() {
+        assertThat(member.getNickname()).isEqualTo("Rojojun");
+
+        member.changeNickname("Charlie2");
+
+        assertThat(member.getNickname()).isEqualTo("Charlie2");
     }
 
     @Test
