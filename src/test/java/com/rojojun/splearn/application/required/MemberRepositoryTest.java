@@ -4,7 +4,6 @@ import com.rojojun.splearn.domain.Member;
 import com.rojojun.splearn.domain.MemberStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -14,12 +13,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
-class MemberRepositoryTest {
-    @Autowired
-    MemberRepository memberRepository;
-
-    @Autowired
-    EntityManager entityManager;
+record MemberRepositoryTest(
+        MemberRepository memberRepository, EntityManager entityManager
+) {
 
     @Test
     void createMember() {
