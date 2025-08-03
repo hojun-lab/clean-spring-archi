@@ -1,4 +1,4 @@
-package com.rojojun.splearn.domain;
+package com.rojojun.splearn.domain.member;
 
 public interface PasswordEncoder {
     String encode(String password);

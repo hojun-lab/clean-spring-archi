@@ -1,7 +1,7 @@
-package com.rojojun.splearn.application.required;
+package com.rojojun.splearn.application.member.required;
 
-import com.rojojun.splearn.domain.Email;
-import com.rojojun.splearn.domain.Member;
+import com.rojojun.splearn.domain.shared.Email;
+import com.rojojun.splearn.domain.member.Member;
 import org.springframework.data.repository.Repository;
 
 import java.util.Optional;

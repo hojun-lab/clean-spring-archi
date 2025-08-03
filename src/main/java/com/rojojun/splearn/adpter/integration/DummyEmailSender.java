@@ -1,7 +1,7 @@
 package com.rojojun.splearn.adpter.integration;
 
-import com.rojojun.splearn.application.required.EmailSender;
-import com.rojojun.splearn.domain.Email;
+import com.rojojun.splearn.application.member.required.EmailSender;
+import com.rojojun.splearn.domain.shared.Email;
 import org.springframework.context.annotation.Fallback;
 import org.springframework.stereotype.Component;
 

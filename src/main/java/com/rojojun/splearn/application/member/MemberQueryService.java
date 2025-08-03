@@ -1,8 +1,8 @@
-package com.rojojun.splearn.application;
+package com.rojojun.splearn.application.member;
 
-import com.rojojun.splearn.application.provided.MemberFinder;
-import com.rojojun.splearn.application.required.MemberRepository;
-import com.rojojun.splearn.domain.Member;
+import com.rojojun.splearn.application.member.provided.MemberFinder;
+import com.rojojun.splearn.application.member.required.MemberRepository;
+import com.rojojun.splearn.domain.member.Member;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

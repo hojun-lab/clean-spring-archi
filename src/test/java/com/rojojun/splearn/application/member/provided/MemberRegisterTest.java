@@ -1,7 +1,11 @@
-package com.rojojun.splearn.application.provided;
+package com.rojojun.splearn.application.member.provided;
 
 import com.rojojun.splearn.SplearnTestConfiguration;
 import com.rojojun.splearn.domain.*;
+import com.rojojun.splearn.domain.member.DuplicateEmailException;
+import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberRegisterRequest;
+import com.rojojun.splearn.domain.member.MemberStatus;
 import jakarta.persistence.EntityManager;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;

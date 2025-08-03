@@ -1,4 +1,4 @@
-package com.rojojun.splearn.domain;
+package com.rojojun.splearn.domain.shared;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

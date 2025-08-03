@@ -1,10 +1,14 @@
-package com.rojojun.splearn.application;
+package com.rojojun.splearn.application.member;
 
-import com.rojojun.splearn.application.provided.MemberFinder;
-import com.rojojun.splearn.application.provided.MemberRegister;
-import com.rojojun.splearn.application.required.EmailSender;
-import com.rojojun.splearn.application.required.MemberRepository;
-import com.rojojun.splearn.domain.*;
+import com.rojojun.splearn.application.member.provided.MemberFinder;
+import com.rojojun.splearn.application.member.provided.MemberRegister;
+import com.rojojun.splearn.application.member.required.EmailSender;
+import com.rojojun.splearn.application.member.required.MemberRepository;
+import com.rojojun.splearn.domain.member.DuplicateEmailException;
+import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberRegisterRequest;
+import com.rojojun.splearn.domain.member.PasswordEncoder;
+import com.rojojun.splearn.domain.shared.Email;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.rojojun.splearn.domain;
+package com.rojojun.splearn.domain.member;
 
 public class DuplicateEmailException extends RuntimeException {
     public DuplicateEmailException(String message) {

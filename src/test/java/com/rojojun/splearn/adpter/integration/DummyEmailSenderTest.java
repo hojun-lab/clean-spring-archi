@@ -1,6 +1,6 @@
 package com.rojojun.splearn.adpter.integration;
 
-import com.rojojun.splearn.domain.Email;
+import com.rojojun.splearn.domain.shared.Email;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.StdIo;
 import org.junitpioneer.jupiter.StdOut;

@@ -1,5 +1,8 @@
 package com.rojojun.splearn.domain;
 
+import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberRegisterRequest;
+import com.rojojun.splearn.domain.member.PasswordEncoder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 public class MemberFixture {

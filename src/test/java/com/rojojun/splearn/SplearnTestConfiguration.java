@@ -1,8 +1,8 @@
 package com.rojojun.splearn;
 
-import com.rojojun.splearn.application.required.EmailSender;
+import com.rojojun.splearn.application.member.required.EmailSender;
 import com.rojojun.splearn.domain.MemberFixture;
-import com.rojojun.splearn.domain.PasswordEncoder;
+import com.rojojun.splearn.domain.member.PasswordEncoder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 

@@ -1,7 +1,7 @@
-package com.rojojun.splearn.application.provided;
+package com.rojojun.splearn.application.member.provided;
 
 import com.rojojun.splearn.SplearnTestConfiguration;
-import com.rojojun.splearn.domain.Member;
+import com.rojojun.splearn.domain.member.Member;
 import com.rojojun.splearn.domain.MemberFixture;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;

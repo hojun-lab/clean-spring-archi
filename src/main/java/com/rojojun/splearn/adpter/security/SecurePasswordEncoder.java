@@ -1,6 +1,6 @@
 package com.rojojun.splearn.adpter.security;
 
-import com.rojojun.splearn.domain.PasswordEncoder;
+import com.rojojun.splearn.domain.member.PasswordEncoder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 

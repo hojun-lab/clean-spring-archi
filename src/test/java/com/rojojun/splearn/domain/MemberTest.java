@@ -1,5 +1,8 @@
 package com.rojojun.splearn.domain;
 
+import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberStatus;
+import com.rojojun.splearn.domain.member.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,6 +24,7 @@ class MemberTest {
     @Test
     void registerMember() {
         assertThat(member.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test

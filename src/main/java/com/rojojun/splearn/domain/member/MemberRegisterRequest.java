@@ -1,4 +1,4 @@
-package com.rojojun.splearn.domain;
+package com.rojojun.splearn.domain.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;

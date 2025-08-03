@@ -1,7 +1,7 @@
-package com.rojojun.splearn.application.required;
+package com.rojojun.splearn.application.member.required;
 
-import com.rojojun.splearn.domain.Member;
-import com.rojojun.splearn.domain.MemberStatus;
+import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberStatus;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -14,7 +14,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 @DataJpaTest
 record MemberRepositoryTest(
-        MemberRepository memberRepository, EntityManager entityManager
+        com.rojojun.splearn.application.member.required.MemberRepository memberRepository, EntityManager entityManager
 ) {
 
     @Test
@@ -32,6 +32,7 @@ record MemberRepositoryTest(
 
         var found = memberRepository.findById(member.getId()).orElseThrow();
         assertThat(found.getStatus()).isEqualTo(MemberStatus.PENDING);
+        assertThat(found.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test

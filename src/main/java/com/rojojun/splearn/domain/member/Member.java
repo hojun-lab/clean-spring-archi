@@ -1,5 +1,7 @@
-package com.rojojun.splearn.domain;
+package com.rojojun.splearn.domain.member;
 
+import com.rojojun.splearn.domain.AbstractEntity;
+import com.rojojun.splearn.domain.shared.Email;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +18,7 @@ import static java.util.Objects.requireNonNull;
 )
 @Entity
 @Getter
-@ToString
+@ToString(callSuper = true, exclude = "detail")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @NaturalIdCache
 public class Member extends AbstractEntity {
@@ -35,6 +37,9 @@ public class Member extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private MemberStatus status;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private MemberDetail detail;
+
     public static Member register(MemberRegisterRequest createRequest, PasswordEncoder passwordEncoder) {
         Member member = new Member();
 
@@ -43,6 +48,8 @@ public class Member extends AbstractEntity {
         member.passwordHash = requireNonNull(passwordEncoder.encode(createRequest.password()));
 
         member.status = MemberStatus.PENDING;
+
+        member.detail = MemberDetail.create();
 
         return member;
     }
