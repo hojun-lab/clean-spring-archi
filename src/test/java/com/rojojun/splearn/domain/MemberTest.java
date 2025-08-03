@@ -1,6 +1,7 @@
 package com.rojojun.splearn.domain;
 
 import com.rojojun.splearn.domain.member.Member;
+import com.rojojun.splearn.domain.member.MemberInfoUpdateRequest;
 import com.rojojun.splearn.domain.member.MemberStatus;
 import com.rojojun.splearn.domain.member.PasswordEncoder;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +30,12 @@ class MemberTest {
 
     @Test
     void activate() {
+        assertThat(member.getDetail().getRegisteredAt()).isNull();
+
         member.activate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.ACTIVE);
+        assertThat(member.getDetail().getRegisteredAt()).isNotNull();
     }
 
     @Test
@@ -50,6 +54,7 @@ class MemberTest {
         member.deactivate();
 
         assertThat(member.getStatus()).isEqualTo(MemberStatus.DEACTIVATED);
+        assertThat(member.getDetail().getDeactivatedAt()).isNotNull();
     }
 
     @Test
@@ -75,6 +80,18 @@ class MemberTest {
         member.changeNickname("Charlie2");
 
         assertThat(member.getNickname()).isEqualTo("Charlie2");
+    }
+
+    @Test
+    void updateInfo() {
+        member.activate();
+
+        MemberInfoUpdateRequest request = new MemberInfoUpdateRequest("meme", "meme123", "나다");
+        member.updateInfo(request);
+
+        assertThat(member.getNickname()).isEqualTo(request.nickname());
+        assertThat(member.getDetail().getProfile().address()).isEqualTo(request.profileAddress());
+        assertThat(member.getDetail().getIntroduction()).isEqualTo(request.introduction());
     }
 
     @Test

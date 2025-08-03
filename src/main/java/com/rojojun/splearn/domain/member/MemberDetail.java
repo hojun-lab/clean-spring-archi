@@ -6,8 +6,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
@@ -19,7 +21,8 @@ import static java.util.Objects.requireNonNull;
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberDetail extends AbstractEntity {
-    private String profile;
+    @Embedded
+    private Profile profile;
 
     private String introduction;
 
@@ -33,5 +36,20 @@ public class MemberDetail extends AbstractEntity {
         MemberDetail memberDetail = new MemberDetail();
         memberDetail.registeredAt = LocalDateTime.now();
         return memberDetail;
+    }
+
+    void activate() {
+        Assert.isTrue(activatedAt == null, "이미 ActivatedAt 은 설정되었습니다.");
+        this.activatedAt = LocalDateTime.now();
+    }
+
+    public void deactivate() {
+        Assert.isTrue(deactivatedAt == null, "이미 DeactivatedAt 은 설정되었습니다.");
+        this.deactivatedAt = LocalDateTime.now();
+    }
+
+    void updateInfo(MemberInfoUpdateRequest updateRequest) {
+        this.profile = new Profile(updateRequest.profileAddress());
+        this.introduction = Objects.requireNonNull(updateRequest.introduction());
     }
 }
