@@ -4,10 +4,7 @@ import com.rojojun.splearn.application.member.provided.MemberFinder;
 import com.rojojun.splearn.application.member.provided.MemberRegister;
 import com.rojojun.splearn.application.member.required.EmailSender;
 import com.rojojun.splearn.application.member.required.MemberRepository;
-import com.rojojun.splearn.domain.member.DuplicateEmailException;
-import com.rojojun.splearn.domain.member.Member;
-import com.rojojun.splearn.domain.member.MemberRegisterRequest;
-import com.rojojun.splearn.domain.member.PasswordEncoder;
+import com.rojojun.splearn.domain.member.*;
 import com.rojojun.splearn.domain.shared.Email;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +39,23 @@ public class MemberModifyService implements MemberRegister {
         Member member = memberFinder.find(memberId);
 
         member.activate();
+
+        return memberRepository.save(member);
+    }
+
+    @Override
+    public Member deactivate(Long memberId) {
+        Member member = memberFinder.find(memberId);
+
+        member.deactivate();
+
+        return memberRepository.save(member);    }
+
+    @Override
+    public Member updateInfo(Long memberId, MemberInfoUpdateRequest updateRequest) {
+        Member member = memberFinder.find(memberId);
+
+        member.updateInfo(updateRequest);
 
         return memberRepository.save(member);
     }

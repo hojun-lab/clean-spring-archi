@@ -1,12 +1,13 @@
 package com.rojojun.splearn.domain.member;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 import java.util.regex.Pattern;
 
 @Embeddable
 public record Profile(
-        String address
+        @Column(length = 20) String address
 ) {
     private final static Pattern PROFILE_ADDRESS_PATTERN =
             Pattern.compile("[a-z0-9]+");
