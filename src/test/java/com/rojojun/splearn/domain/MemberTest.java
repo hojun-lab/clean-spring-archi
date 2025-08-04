@@ -95,6 +95,14 @@ class MemberTest {
     }
 
     @Test
+    void updateInfoFail() {
+        assertThatThrownBy(() -> {
+            MemberInfoUpdateRequest request = new MemberInfoUpdateRequest("meme", "meme123", "나다");
+            member.updateInfo(request);
+        }).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
     void changePassword() {
         member.changePassword("verysecret2", passwordEncoder);
 

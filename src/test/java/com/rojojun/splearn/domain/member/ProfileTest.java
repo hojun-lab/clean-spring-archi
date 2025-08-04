@@ -11,11 +11,11 @@ class ProfileTest {
         new Profile("rojojun");
         new Profile("123456");
         new Profile("rojojun12");
+        new Profile("");
     }
 
     @Test
     void profileFail() {
-        new Profile("");
         new Profile("A");
         new Profile("프로필");
     }
